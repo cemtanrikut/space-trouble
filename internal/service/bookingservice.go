@@ -22,6 +22,10 @@ func (s *BookingService) GetAllBookings(ctx context.Context) ([]*model.Booking, 
 	return s.repo.GetAllBookings(ctx)
 }
 
+func (s *BookingService) DeleteBooking(ctx context.Context, id int64) error {
+	return s.repo.DeleteBooking(ctx, id)
+}
+
 // CheckLaunchAvailability checks if there is any SpaceX launch on the given date and launchpad
 func (s *BookingService) CheckLaunchAvailability(ctx context.Context, launchpadID string, launchDate time.Time) (bool, error) {
 	launches, err := s.spaceXClient.GetUpcomingLaunches()

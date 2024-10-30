@@ -58,3 +58,8 @@ func (r *BookingRepository) GetAllBookings(ctx context.Context) ([]*model.Bookin
 
 	return bookings, nil
 }
+
+func (r *BookingRepository) DeleteBooking(ctx context.Context, id int64) error {
+	_, err := r.db.ExecContext(ctx, "DELETE FROM bookings WHERE id = $1", id)
+	return err
+}

@@ -13,6 +13,9 @@ func (app *App) SetupRouter() *mux.Router {
 	// Endpoint to get all bookings
 	router.HandleFunc("/bookings", app.getAllBookingsHandler).Methods("GET")
 
+	// Endpoint to delete a booking
+	router.HandleFunc("/bookings/{id}", app.deleteBookingHandler).Methods("DELETE")
+
 	spacexHandler := NewSpaceXHandler(app.SpaceXService)
 
 	router.HandleFunc("/api/spacex/launches/upcoming", spacexHandler.GetUpcomingLaunches).Methods("GET")

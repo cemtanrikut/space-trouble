@@ -5,6 +5,9 @@ import (
 	"net/http"
 	"space-trouble/internal/model"
 	"space-trouble/internal/service"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type App struct {
@@ -36,4 +39,21 @@ func (app *App) getAllBookingsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(bookings)
+}
+
+// deleteBookingHandler deletes a booking by ID
+func (app *App) deleteBookingHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid booking ID", http.StatusBadRequest)
+		return
+	}
+
+	if err := app.Services.DeleteBooking(r.Context(), int64(id)); err != nil {
+		http.Error(w, "Could not delete booking: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
