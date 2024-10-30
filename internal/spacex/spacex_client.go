@@ -3,6 +3,7 @@ package spacex
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 )
 
 type Launchpad struct {
@@ -23,10 +24,23 @@ type Launch struct {
 	LaunchpadID string `json:"launchpad"`
 }
 
+// Client for send request SpaceX API
+type Client struct {
+	httpClient *http.Client
+	BaseURL    string
+}
+
+// NewClient creates Client for SpaceX API
+func NewClient() *Client {
+	return &Client{
+		httpClient: &http.Client{Timeout: 10 * time.Second},
+		BaseURL:    "https://api.spacexdata.com/v4",
+	}
+}
+
 // GetLaunchpads fetches all available launchpads from SpaceX API
-func GetLaunchpads() ([]Launchpad, error) {
-	url := "https://api.spacexdata.com/v4/launchpads"
-	resp, err := http.Get(url)
+func (c *Client) GetLaunchpads() ([]Launchpad, error) {
+	resp, err := c.httpClient.Get(c.BaseURL + "/launchpads")
 	if err != nil {
 		return nil, err
 	}
@@ -41,9 +55,8 @@ func GetLaunchpads() ([]Launchpad, error) {
 }
 
 // GetUpcomingLaunches fetches upcoming launches from SpaceX API
-func GetUpcomingLaunches() ([]Launch, error) {
-	url := "https://api.spacexdata.com/v4/launches/upcoming"
-	resp, err := http.Get(url)
+func (c *Client) GetUpcomingLaunches() ([]Launch, error) {
+	resp, err := c.httpClient.Get(c.BaseURL + "/launches/upcoming")
 	if err != nil {
 		return nil, err
 	}

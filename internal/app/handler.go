@@ -8,7 +8,8 @@ import (
 )
 
 type App struct {
-	Services *service.BookingService
+	Services      *service.BookingService
+	SpaceXService *service.SpaceXService
 }
 
 func (app *App) bookTicketHandler(w http.ResponseWriter, r *http.Request) {

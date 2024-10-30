@@ -13,5 +13,10 @@ func (app *App) SetupRouter() *mux.Router {
 	// Endpoint to get all bookings
 	router.HandleFunc("/bookings", app.getAllBookingsHandler).Methods("GET")
 
+	spacexHandler := NewSpaceXHandler(app.SpaceXService)
+
+	router.HandleFunc("/api/spacex/launches/upcoming", spacexHandler.GetUpcomingLaunches).Methods("GET")
+	router.HandleFunc("/api/spacex/launchpads", spacexHandler.GetLaunchpads).Methods("GET")
+
 	return router
 }
